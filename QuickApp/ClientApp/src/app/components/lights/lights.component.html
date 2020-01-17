@@ -1,44 +1,36 @@
-
 <div>
-  <ngx-datatable class="material sm table-hover"
-        [rows]="rows"
-        [loadingIndicator]="loadingIndicator"
-        [columns]="columns"
-        
-        headerHeight="50"
-        footerHeight="50"
-        rowHeight="auto"
-        [reorderable]="reorderable"
-        [columnMode]="'force'"
-      >
-      </ngx-datatable>
+  <ngx-datatable class="material colored-header sm table table-striped table-hover"
+                 [loadingIndicator]="loadingIndicator"
+                 [rows]="rows"
+                 [rowHeight]="35"
+                 [headerHeight]="35"
+                 [footerHeight]="35"
+                 [columns]="columns"
+                 [scrollbarV]="true"
+                 [columnMode]="'force'">
+  </ngx-datatable>
 
       <ng-template #colorTemplate let-row="row" let-value="value">
         <div>
-          <span class="colorSquare"  [ngStyle]="{'background-color': value}" ></span>
+          <span class="colorSquare" [ngStyle]="{'background-color': value}" ></span>
           <span> {{value}}</span>
         </div>
       </ng-template>
 
-      <ng-template #actionsTemplate let-row="row" let-value="value">
-        <!-- detail edit delete turnOn -->
-        <div>
-          <a class="btn btn-link btn-sm" href="javascript:;" tooltip="{{'todoDemo.management.Edit' | translate}}" container="body" (click)="edit(row)"><i class="fa fa-edit"></i></a>
-          <a class="btn btn-link btn-sm" href="javascript:;" tooltip="{{'todoDemo.management.Delete' | translate}}" container="body" (click)="delete(row)"><i class="fa fa-times"></i></a>
-        
-        </div>
+      <ng-template #indexTemplate let-value="value">
+        <strong>{{value}}</strong>
+      </ng-template>
+    
+      <ng-template #actionsTemplate let-row="row" let-value="value" let-i="index">
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="edit(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="detail(row)"><i class="fa fa-eye" aria-hidden="true"></i> {{'roles.management.Details' | translate}}</a>
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="delete(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
       </ng-template>
 
       <ng-template #turnOnTemplate let-row="row" let-value="value">
-        <div  >
-          <input name="turnOnInput" [(ngModel)]="value" type="checkbox"   (change)="turnOnLite(value)"> 
+        <div >
+          <input name="turnOnInput" [(ngModel)]="value" type="checkbox"  (change)="turnOnLite(value)"> 
         </div>
       </ng-template>
-
-      <!-- <ng-template #turnOnTemplate let-row="row" let-value="value">
-        <div class="custom-control custom-switch" >
-          <input name="turnOnInput" [(ngModel)]="value" type="checkbox" class="custom-control-input"  (change)="turnOnLite(value)"> 
-        </div>
-      </ng-template> -->
 
 </div>
