@@ -1,0 +1,44 @@
+
+<div>
+  <ngx-datatable class="material sm table-hover"
+        [rows]="rows"
+        [loadingIndicator]="loadingIndicator"
+        [columns]="columns"
+        
+        headerHeight="50"
+        footerHeight="50"
+        rowHeight="auto"
+        [reorderable]="reorderable"
+        [columnMode]="'force'"
+      >
+      </ngx-datatable>
+
+      <ng-template #colorTemplate let-row="row" let-value="value">
+        <div>
+          <span class="colorSquare"  [ngStyle]="{'background-color': value}" ></span>
+          <span> {{value}}</span>
+        </div>
+      </ng-template>
+
+      <ng-template #actionsTemplate let-row="row" let-value="value">
+        <!-- detail edit delete turnOn -->
+        <div>
+          <a class="btn btn-link btn-sm" href="javascript:;" tooltip="{{'todoDemo.management.Edit' | translate}}" container="body" (click)="edit(row)"><i class="fa fa-edit"></i></a>
+          <a class="btn btn-link btn-sm" href="javascript:;" tooltip="{{'todoDemo.management.Delete' | translate}}" container="body" (click)="delete(row)"><i class="fa fa-times"></i></a>
+        
+        </div>
+      </ng-template>
+
+      <ng-template #turnOnTemplate let-row="row" let-value="value">
+        <div  >
+          <input name="turnOnInput" [(ngModel)]="value" type="checkbox"   (change)="turnOnLite(value)"> 
+        </div>
+      </ng-template>
+
+      <!-- <ng-template #turnOnTemplate let-row="row" let-value="value">
+        <div class="custom-control custom-switch" >
+          <input name="turnOnInput" [(ngModel)]="value" type="checkbox" class="custom-control-input"  (change)="turnOnLite(value)"> 
+        </div>
+      </ng-template> -->
+
+</div>
