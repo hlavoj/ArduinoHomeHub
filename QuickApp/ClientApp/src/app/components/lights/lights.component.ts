@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { LightsEndpointService } from '../../services/http/lights-endpoint.service'
 import { Light } from '../../models/light.model';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
@@ -18,10 +18,9 @@ export class LightsComponent implements OnInit {
   loadingIndicator: boolean;
   //reorderable = true;
 
-  editedLight: Light;
+  editedLight: Light = new Light ();
   sourceLight: Light;
   editingLightName: { name: string };
-
 
   @ViewChild('colorTemplate', { static: true })
   colorTemplate: TemplateRef<any>;
@@ -34,14 +33,20 @@ export class LightsComponent implements OnInit {
 
   @ViewChild('actionsTemplate', { static: true })
   actionsTemplate: TemplateRef<any>;
-  
+
   @ViewChild('editorModal', { static: true })
   editorModal: ModalDirective;
 
+  @ViewChild('f', { static: false })
+  public form;
+
+  
+  @Input()
+  isViewOnly: boolean;
 
   constructor(
     private alertService: AlertService, private translationService: AppTranslationService,
-    private lightsService: LightsEndpointService
+    private lightsService: LightsEndpointService,
   ) { }
 
   ngOnInit() {
@@ -88,12 +93,33 @@ export class LightsComponent implements OnInit {
       MessageSeverity.error, error);
   }
 
-  onEditorModalHidden(){
+  onSearchChanged(value: string) {
+    this.rows = this.rowsCache.filter(r => Utilities.searchArray(value, false, r.id, r.intensity, r.turnOn, r.color));
+  }
+
+  onEditorModalHidden() {
     this.editingLightName = null;
   }
 
-  newUser(){
+  newUser() {
     this.editorModal.show();
+
+    //this.formResetToggle = false;
+
+    setTimeout(() => {
+      //this.formResetToggle = true;
+
+      this.editedLight = new Light;
+      this.editorModal.show();
+    });
+  }
+
+  showErrorAlert(caption: string, message: string) {
+    this.alertService.showMessage(caption, message, MessageSeverity.error);
+  }
+
+  save() {
+    console.info('save new light', this.editedLight);
   }
 
   turnOnLite(row) {
