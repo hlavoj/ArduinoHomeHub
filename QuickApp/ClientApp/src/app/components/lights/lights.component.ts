@@ -4,6 +4,7 @@ import { Light } from '../../models/light.model';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { AppTranslationService } from '../../services/app-translation.service';
 import { Utilities } from '../../services/utilities';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-lights',
@@ -14,11 +15,12 @@ export class LightsComponent implements OnInit {
   columns: any[] = [];
   rows: Light[] = [];
   rowsCache: Light[] = [];
-  editedUser: Light;
-  sourceUser: Light;
-  editingUserName: { name: string };
   loadingIndicator: boolean;
   //reorderable = true;
+
+  editedLight: Light;
+  sourceLight: Light;
+  editingLightName: { name: string };
 
 
   @ViewChild('colorTemplate', { static: true })
@@ -32,6 +34,10 @@ export class LightsComponent implements OnInit {
 
   @ViewChild('actionsTemplate', { static: true })
   actionsTemplate: TemplateRef<any>;
+  
+  @ViewChild('editorModal', { static: true })
+  editorModal: ModalDirective;
+
 
   constructor(
     private alertService: AlertService, private translationService: AppTranslationService,
@@ -82,6 +88,13 @@ export class LightsComponent implements OnInit {
       MessageSeverity.error, error);
   }
 
+  onEditorModalHidden(){
+    this.editingLightName = null;
+  }
+
+  newUser(){
+    this.editorModal.show();
+  }
 
   turnOnLite(row) {
     console.info('turn on light', row);
