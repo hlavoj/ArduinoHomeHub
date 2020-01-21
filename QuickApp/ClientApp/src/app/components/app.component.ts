@@ -127,8 +127,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isUserLoggedIn = this.authService.isLoggedIn;
 
     // 0.5 extra sec to display preboot/loader information. Preboot screen is removed 0.5 sec later
-    setTimeout(() => this.isAppLoaded = true, 500);
-    setTimeout(() => this.removePrebootScreen = true, 1000);
+    // setTimeout(() => this.isAppLoaded = true, 500);
+    // setTimeout(() => this.removePrebootScreen = true, 1000);
 
     setTimeout(() => {
       if (this.isUserLoggedIn) {
