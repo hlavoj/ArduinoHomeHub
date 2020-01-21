@@ -56,8 +56,8 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 *ngIf="!editingLightName" class="modal-title float-left"><i class="fa fa-user-plus"></i> {{'users.management.NewUser' | translate}}</h4>
-              <h4 *ngIf="editingLightName" class="modal-title float-left"><i class="fa fa-user-circle-o"></i> {{'users.management.EditUser' | translate:editingLightName}}</h4>
+              <h4 *ngIf="!editingLightName" class="modal-title float-left"><i class="fa fa-user-plus"></i> Add Light</h4>
+              <h4 *ngIf="editingLightName" class="modal-title float-left"><i class="fa fa-user-circle-o"></i> Edit light: {{editingLightName}}</h4>
               <button type="button" class="close float-right" title="Close" (click)="editorModal.hide()">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -65,17 +65,17 @@
             <div class="modal-body">
               <!-- <user-info #userEditor [isGeneralEditor]="true"></user-info> -->
               <form name="taskEditorForm" #f="ngForm" (ngSubmit)="f.form.valid ? save() : 
-              (!lightName.valid && showErrorAlert('Task name is required', 'Please enter a name for the task')); ">
+              (showErrorAlert('Creating light failed.', 'Please check form messages.')); ">
 
             <div class="form-group row has-feedback-icon">
-                <label class="col-form-label col-md-3" for="lightName">{{'todoDemo.editor.Name' | translate}}:</label>
+                <label class="col-form-label col-md-3" for="lightName">Name:</label>
                 <div class="col-md-9">
-                    <input autofocus type="text" id="lightName" name="lightName" placeholder="Enter task name" class="form-control" 
+                    <input autofocus type="text" id="lightName" name="lightName" placeholder="Enter light name" class="form-control" 
                         [ngClass]="{'is-valid': f.submitted && lightName.valid, 'is-invalid' : f.submitted && !lightName.valid}"
-                        [(ngModel)]="editedLight.color" #lightName="ngModel" required />
+                        [(ngModel)]="editedLight.name" #lightName="ngModel" required minlength="4" />
                     <i *ngIf="f.submitted" class="fa form-control-feedback" [ngClass]="{'fa-check': lightName.valid, 'fa-times' : !lightName.valid}" aria-hidden="true"></i>
                     <span *ngIf="f.submitted && !lightName.valid" class="invalid-feedback">
-                        {{'todoDemo.editor.TaskNameRequired' | translate}}
+                        Lights ame is required
                     </span>
                 </div>
             </div>
@@ -86,12 +86,39 @@
                     <input type="number" id="lightIntensity" name="lightIntensity" placeholder="Enter intensity" class="form-control" 
                       [(ngModel)]="editedLight.intensity"  #lightIntensity="ngModel"
                       [ngClass]="{'is-valid': lightIntensity.valid, 'is-invalid': !lightIntensity.valid}"
-                      required min="0" max="2"/>
+                      min="0" min="100" required />
                     <span *ngIf="f.submitted && !lightIntensity.valid" class="invalid-feedback">
                       error 0 - 100
                     </span>
+
                 </div>
             </div>
+
+            <div class="form-group row ">
+              <label class="col-form-label col-md-3" for="lightColor">Color:</label>
+              <div class="col-md-6">
+                <input autofocus type="text" id="lightColorText" name="lightColorText" class="form-control" [(ngModel)]="editedLight.color" #lightColorText="ngModel" />
+              </div>
+              <div class="col-md-3">
+                  <input type="color" id="lightColor" name="lightColor" placeholder="Enter color" class="form-control" 
+                    [(ngModel)]="editedLight.color"  #lightColor="ngModel"
+                    required  value="#ff0000"/>
+                  <span *ngIf="f.submitted && !lightColor.valid" class="invalid-feedback">
+                    color is required
+                  </span>
+
+              </div>
+              
+          </div>
+
+          <div class="form-group row ">
+            <label class="col-form-label col-md-3" for="lightColor">Turn On:</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <input name="lightColor" [(ngModel)]="editedLight.turnOn" class="form-control" type="checkbox" bootstrapToggle data-size="small">
+              </div>
+            </div>
+        </div>
 
         
 
@@ -104,7 +131,8 @@
 
             <div class="form-group actionBtn-form-group">
                 <div class="float-right">
-                    <button type="submit" class="btn btn-primary">Add </button>
+                    <button *ngIf="!editingLightName"type="submit" class="btn btn-primary">Add </button>
+                    <button *ngIf="editingLightName"type="submit" class="btn btn-primary">Save </button>
                 </div>
             </div>
             <div class="clearfix"></div>

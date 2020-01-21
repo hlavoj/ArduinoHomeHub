@@ -20,7 +20,7 @@ export class LightsComponent implements OnInit {
 
   editedLight: Light = new Light ();
   sourceLight: Light;
-  editingLightName: { name: string };
+  editingLightName;
 
   @ViewChild('colorTemplate', { static: true })
   colorTemplate: TemplateRef<any>;
@@ -47,7 +47,9 @@ export class LightsComponent implements OnInit {
   constructor(
     private alertService: AlertService, private translationService: AppTranslationService,
     private lightsService: LightsEndpointService,
-  ) { }
+  ) { 
+    this.editedLight.turnOn = false;
+  }
 
   ngOnInit() {
 
@@ -55,6 +57,7 @@ export class LightsComponent implements OnInit {
 
     this.columns = [
       { prop: 'id', name: 'Id' },
+      { prop: 'name', name: 'Name' },
       { prop: 'turnOn', name: 'Turn On', cellTemplate: this.turnOnTemplate },
       { prop: 'intensity', name: 'Intensity' },
       { prop: 'color', name: 'Color', cellTemplate: this.colorTemplate },
@@ -110,6 +113,8 @@ export class LightsComponent implements OnInit {
       //this.formResetToggle = true;
 
       this.editedLight = new Light;
+      this.editedLight.turnOn = false;
+      this.editedLight.color = '#ffffff';
       this.editorModal.show();
     });
   }
@@ -128,6 +133,17 @@ export class LightsComponent implements OnInit {
 
   edit(row) {
     console.info('edit light', row);
+
+    this.editorModal.show();
+
+    //this.formResetToggle = false;
+
+    setTimeout(() => {
+      //this.formResetToggle = true;
+      this.editingLightName = "asdf";
+      this.editedLight = row
+      this.editorModal.show();
+    });
   }
 
   delete(row) {
