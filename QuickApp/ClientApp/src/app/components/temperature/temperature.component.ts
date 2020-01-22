@@ -3,6 +3,7 @@ import { Data } from '../../models/data.model'
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { TemperatureEndpointService } from '../../services/http/temperature-endpoint.service'
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-temperature',
@@ -28,12 +29,35 @@ export class TemperatureComponent implements OnInit {
   public lineChartType = 'line';
   public lineChartPlugins = [];
 
+  fromDate;
+  toDate;
+  samplinginterval;
+  filterAll = true;
+  columns: any[] = [];
+  rows: any[] = [];
+  loadingIndicator: boolean;
+
   constructor(
     private temperatureService: TemperatureEndpointService
   ) { }
 
   ngOnInit() {
 
+    this.columns = [
+      { prop: 'dateTime', name: 'Date ' },
+      { prop: 'temperature', name: 'Temperature' },
+      { prop: 'humidity', name: 'Humidity' },
+    ];
+
+    this.rows = [
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+    ]
     var adata = this.temperatureService.getTemperatures();
     adata.subscribe(data => { this.processData( data) } );
   }
@@ -47,6 +71,11 @@ export class TemperatureComponent implements OnInit {
     ]
 
     this. lineChartLabels = d.Labels
+  }
+
+  filter(){
+    console.info('filter ', this.fromDate, this.toDate, this.samplinginterval);
+
   }
 
 }

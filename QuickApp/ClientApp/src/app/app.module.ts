@@ -42,6 +42,7 @@ import { BootstrapToggleDirective } from './directives/bootstrap-toggle.directiv
 import { BootstrapSelectDirective } from './directives/bootstrap-select.directive';
 import { BootstrapDatepickerDirective } from './directives/bootstrap-datepicker.directive';
 import { GroupByPipe } from './pipes/group-by.pipe';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './components/app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -69,6 +70,7 @@ import { RoleEditorComponent } from './components/controls/role-editor.component
         HttpClientModule,
         FormsModule,
         AppRoutingModule,
+        NgbModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
