@@ -32,7 +32,7 @@ namespace QuickApp
     {
         private IWebHostEnvironment _env { get; }
         public IConfiguration Configuration { get; }
-
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -112,7 +112,10 @@ namespace QuickApp
 
 
             // Add cors
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("http://localhost:4200"); });
+            });
 
             services.AddControllersWithViews();
 
@@ -193,10 +196,7 @@ namespace QuickApp
             }
 
             app.UseRouting();
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod());
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseIdentityServer();
             app.UseAuthorization();

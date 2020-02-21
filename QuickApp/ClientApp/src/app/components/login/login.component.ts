@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { ConfigurationService } from '../../services/configuration.service';
 import { Utilities } from '../../services/utilities';
 import { UserLogin } from '../../models/user-login.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
@@ -29,13 +30,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     isModal = false;
 
 
-    constructor(private alertService: AlertService, private authService: AuthService, private configurations: ConfigurationService) {
+    constructor(private alertService: AlertService, private authService: AuthService, private configurations: ConfigurationService, private http: HttpClient) {
 
     }
 
 
     ngOnInit() {
-
         this.userLogin.rememberMe = this.authService.rememberMe;
 
         if (this.getShouldRedirect()) {

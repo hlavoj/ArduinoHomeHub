@@ -17,9 +17,10 @@ import { LoginResponse } from '../models/login-response.model';
 @Injectable()
 export class OidcHelperService {
 
-    private get baseUrl() { return this.configurations.baseUrl; }
+    //private get baseUrl() { return this.configurations.baseUrl; }
+    private get baseUrl() { return 'https://localhost:5001'}
     private clientId = 'quickapp_spa';
-    private scope = 'openid email phone profile offline_access roles quickapp_api';
+    private scope = 'openid email profile';
 
     constructor(
         private http: HttpClient,
