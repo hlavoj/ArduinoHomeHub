@@ -16,6 +16,7 @@ export class TemperatureEndpointService extends EndpointBase {
 
   //get endpointUrl() { return this.configurations.baseUrl + '/data/1/temperature' }
   get endpointUrl() { return 'https://private-293278-angulartutorial1.apiary-mock.com' + '/data/1/temperature' }
+  get endpointDataUrl() { return 'http://localhost:5000' + '/api/temperature' }
 
   constructor(http: HttpClient, authService: AuthService, private configurations: ConfigurationService) {
     super(http, authService);
@@ -28,9 +29,30 @@ export class TemperatureEndpointService extends EndpointBase {
       }));
   }
 
+
+
   getTemperatures(userId?: string) {
     return this.getTemperaturesEndpoint<Data>();
   }
+
+  getTemperaturesData(fromDate?: Date, toDate?: Date) {
+    return this.getTemperaturesDataEndpoint(fromDate);
+  }
+
+  getTemperaturesDataEndpoint(fromDate?: Date, toDate?: Date): Observable<Data> {
+    var url = this.endpointDataUrl
+    if (fromDate)
+      url += `?from=${fromDate.toJSON()}`
+    if (toDate)
+      url += `&to=${toDate.toJSON()}`
+
+ 
+    return this.http.get<Data>(url, this.requestHeaders).pipe<Data>(
+      catchError(error => {
+        return this.handleError(error, () => this.getTemperaturesEndpoint());
+      }));
+  }
+
 
 
 }

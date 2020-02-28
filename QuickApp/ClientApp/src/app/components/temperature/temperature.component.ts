@@ -17,7 +17,7 @@ export class TemperatureComponent implements OnInit {
   ];
   public lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', '2', '3'];
   public lineChartOptions: (ChartOptions & { annotation: any }) = {
-    responsive: true,annotation: ''
+    responsive: true, annotation: ''
   };
   public lineChartColors: Color[] = [
     {
@@ -29,8 +29,8 @@ export class TemperatureComponent implements OnInit {
   public lineChartType = 'line';
   public lineChartPlugins = [];
 
-  fromDate;
-  toDate;
+  fromDate: Date;
+  toDate: Date;
   samplinginterval;
   filterAll = true;
   columns: any[] = [];
@@ -50,31 +50,41 @@ export class TemperatureComponent implements OnInit {
     ];
 
     this.rows = [
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
-      {"dateTime": "15.5.2020", "temperature": "23", "humidity" : "60"},
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
+      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
     ]
-    var adata = this.temperatureService.getTemperatures();
-    adata.subscribe(data => { this.processData( data) } );
+    // var adata = this.temperatureService.getTemperatures();
+    // adata.subscribe(data => { this.processData( data) } );
+
+
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(this.fromDate, this.toDate);
+    adata.subscribe(data => { this.processData(data) });
   }
 
-  processData(d: Data){
+  processData(d: Data) {
     console.info('test ', d);
 
-    this.lineChartData = [
-      { data: d.Humidity, label: 'humidity'},
-      { data: d.Temperature, label: 'temperature'}
-    ]
+    if (d) {
 
-    this. lineChartLabels = d.Labels
+      // this.lineChartData = [
+      //   { data: d.Humidity, label: 'humidity' },
+      //   { data: d.Temperature, label: 'temperature' }
+      // ]
+
+      // this.lineChartLabels = d.Labels
+    }
   }
 
-  filter(){
+  filter() {
     console.info('filter ', this.fromDate, this.toDate, this.samplinginterval);
+
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(this.fromDate, this.toDate);
+    adata.subscribe(data => { this.processData(data) });
 
   }
 
