@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { EndpointBase } from './endpoint-base.service';
 import { ConfigurationService } from '../configuration.service';
 import { Data } from '../../models/data.model';
+import { DataResponse } from 'src/app/models/dataResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,22 +33,23 @@ export class TemperatureEndpointService extends EndpointBase {
 
 
   getTemperatures(userId?: string) {
-    return this.getTemperaturesEndpoint<Data>();
+    return this.getTemperaturesEndpoint<DataResponse[]>();
   }
 
   getTemperaturesData(fromDate?: Date, toDate?: Date) {
     return this.getTemperaturesDataEndpoint(fromDate);
   }
 
-  getTemperaturesDataEndpoint(fromDate?: Date, toDate?: Date): Observable<Data> {
+  getTemperaturesDataEndpoint(fromDate: Date, toDate?: Date, samplinginterval?: any): Observable<DataResponse[]> {
     var url = this.endpointDataUrl
     if (fromDate)
-      url += `?from=${fromDate.toJSON()}`
+      url += `?from=${ new Date(fromDate) .toJSON()}`
     if (toDate)
       url += `&to=${toDate.toJSON()}`
-
+    if(samplinginterval)
+      url += `&interval=${samplinginterval}`
  
-    return this.http.get<Data>(url, this.requestHeaders).pipe<Data>(
+    return this.http.get<DataResponse[]>(url, this.requestHeaders).pipe<DataResponse[]>(
       catchError(error => {
         return this.handleError(error, () => this.getTemperaturesEndpoint());
       }));

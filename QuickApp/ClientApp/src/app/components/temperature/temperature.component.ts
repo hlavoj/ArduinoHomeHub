@@ -4,6 +4,8 @@ import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { TemperatureEndpointService } from '../../services/http/temperature-endpoint.service'
 import { from } from 'rxjs';
+import { DataResponse } from 'src/app/models/dataResponse.model';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-temperature',
@@ -29,7 +31,7 @@ export class TemperatureComponent implements OnInit {
   public lineChartType = 'line';
   public lineChartPlugins = [];
 
-  fromDate: Date;
+  fromDate: NgbDateStruct;
   toDate: Date;
   samplinginterval;
   filterAll = true;
@@ -61,29 +63,47 @@ export class TemperatureComponent implements OnInit {
     // var adata = this.temperatureService.getTemperatures();
     // adata.subscribe(data => { this.processData( data) } );
 
+    // var dateTest = new Date(this.fromDate.year, this.fromDate.month , this.fromDate.day);
 
-    var adata = this.temperatureService.getTemperaturesDataEndpoint(this.fromDate, this.toDate);
-    adata.subscribe(data => { this.processData(data) });
+    // var adata = this.temperatureService.getTemperaturesDataEndpoint(dateTest, this.toDate, this.samplinginterval);
+    // adata.subscribe(data => { this.processData(data) });
   }
 
-  processData(d: Data) {
+  processData(d: DataResponse[]) {
     console.info('test ', d);
 
-    if (d) {
+    var data: Data = new Data();
+    data.Temperature = [];
+    data.Humidity = [];
+    data.Labels = [];
+    d.forEach(e => {
+      data.Temperature.push(e.temperature);
+      data.Humidity.push(e.humidity);
+      data.Labels.push(e.dateTime.toString());
+    });
 
-      // this.lineChartData = [
-      //   { data: d.Humidity, label: 'humidity' },
-      //   { data: d.Temperature, label: 'temperature' }
-      // ]
 
-      // this.lineChartLabels = d.Labels
-    }
+
+    console.info('test 2', data);
+
+
+
+
+    this.lineChartData = [
+      { data: data.Humidity, label: 'humidity' },
+      { data: data.Temperature, label: 'temperature' }
+    ]
+
+    this.lineChartLabels = data.Labels
+
   }
 
   filter() {
     console.info('filter ', this.fromDate, this.toDate, this.samplinginterval);
 
-    var adata = this.temperatureService.getTemperaturesDataEndpoint(this.fromDate, this.toDate);
+    var dateTest = new Date(this.fromDate.year, this.fromDate.month , this.fromDate.day);
+
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(dateTest, this.toDate, this.samplinginterval);
     adata.subscribe(data => { this.processData(data) });
 
   }
