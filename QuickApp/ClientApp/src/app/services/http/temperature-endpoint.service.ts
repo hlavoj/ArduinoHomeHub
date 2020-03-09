@@ -18,6 +18,7 @@ export class TemperatureEndpointService extends EndpointBase {
   //get endpointUrl() { return this.configurations.baseUrl + '/data/1/temperature' }
   get endpointUrl() { return 'https://private-293278-angulartutorial1.apiary-mock.com' + '/data/1/temperature' }
   get endpointDataUrl() { return 'http://localhost:5000' + '/api/temperature' }
+//  get endpointDataUrl() { return 'http://arduinohomehubbe.azurewebsites.net/' + '/api/temperature' }
 
   constructor(http: HttpClient, authService: AuthService, private configurations: ConfigurationService) {
     super(http, authService);

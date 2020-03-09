@@ -32,7 +32,7 @@ export class TemperatureComponent implements OnInit {
   public lineChartPlugins = [];
 
   fromDate: NgbDateStruct;
-  toDate: Date;
+  toDate: NgbDateStruct;
   samplinginterval;
   filterAll = true;
   columns: any[] = [];
@@ -51,22 +51,10 @@ export class TemperatureComponent implements OnInit {
       { prop: 'humidity', name: 'Humidity' },
     ];
 
-    this.rows = [
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-      { "dateTime": "15.5.2020", "temperature": "23", "humidity": "60" },
-    ]
-    // var adata = this.temperatureService.getTemperatures();
-    // adata.subscribe(data => { this.processData( data) } );
 
-    // var dateTest = new Date(this.fromDate.year, this.fromDate.month , this.fromDate.day);
 
-    // var adata = this.temperatureService.getTemperaturesDataEndpoint(dateTest, this.toDate, this.samplinginterval);
-    // adata.subscribe(data => { this.processData(data) });
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(null, null, null);
+    adata.subscribe(data => { this.processData(data) });
   }
 
   processData(d: DataResponse[]) {
@@ -82,13 +70,6 @@ export class TemperatureComponent implements OnInit {
       data.Labels.push(e.dateTime.toString());
     });
 
-
-
-    console.info('test 2', data);
-
-
-
-
     this.lineChartData = [
       { data: data.Humidity, label: 'humidity' },
       { data: data.Temperature, label: 'temperature' }
@@ -96,15 +77,30 @@ export class TemperatureComponent implements OnInit {
 
     this.lineChartLabels = data.Labels
 
+    this.rows = d;
+
+
+
+  }
+
+  reloadData() {
+    let fromDateModel = null;
+    if (this.fromDate !== undefined) {
+      fromDateModel = new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day,0,0,0);
+    }
+
+    let toDateModel = null;
+    if (this.toDate !== undefined)
+      toDateModel = new Date(this.toDate.year, this.toDate.month-1, this.toDate.day,23,59,59);
+
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(fromDateModel, toDateModel, this.samplinginterval);
+    adata.subscribe(data => { this.processData(data) });
   }
 
   filter() {
     console.info('filter ', this.fromDate, this.toDate, this.samplinginterval);
 
-    var dateTest = new Date(this.fromDate.year, this.fromDate.month , this.fromDate.day);
-
-    var adata = this.temperatureService.getTemperaturesDataEndpoint(dateTest, this.toDate, this.samplinginterval);
-    adata.subscribe(data => { this.processData(data) });
+    this.reloadData();
 
   }
 
