@@ -19,7 +19,7 @@ export class TemperatureComponent implements OnInit {
   ];
   public lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', '2', '3'];
   public lineChartOptions: (ChartOptions & { annotation: any }) = {
-    responsive: true, annotation: ''
+    maintainAspectRatio: false, responsive: true, annotation: ''
   };
   public lineChartColors: Color[] = [
     {
@@ -51,10 +51,20 @@ export class TemperatureComponent implements OnInit {
       { prop: 'humidity', name: 'Humidity' },
     ];
 
+    var dd = new Date(Date.now()); 
 
+    this.fromDate = {
+      "year": dd.getFullYear(),
+      "month": dd.getMonth()+1,
+      "day": dd.getDate()
+    }
+    this.toDate = {
+      "year": dd.getFullYear(),
+      "month": dd.getMonth()+1,
+      "day": dd.getDate()
+    }
 
-    var adata = this.temperatureService.getTemperaturesDataEndpoint(null, null, null);
-    adata.subscribe(data => { this.processData(data) });
+   this.reloadData();
   }
 
   processData(d: DataResponse[]) {
@@ -67,7 +77,12 @@ export class TemperatureComponent implements OnInit {
     d.forEach(e => {
       data.Temperature.push(e.temperature);
       data.Humidity.push(e.humidity);
-      data.Labels.push(e.dateTime.toString());
+      let date = new Date(e.dateTime)
+      
+      var dateFormat = require('dateformat');
+      let a  = dateFormat(date, "dd.mm HH:MM");
+
+      data.Labels.push(a);
     });
 
     this.lineChartData = [
@@ -84,6 +99,11 @@ export class TemperatureComponent implements OnInit {
   }
 
   reloadData() {
+    let sampling = this.samplinginterval;
+    if(this.samplinginterval == 'All' || this.samplinginterval === undefined)  {
+      sampling = null;
+    }
+
     let fromDateModel = null;
     if (this.fromDate !== undefined) {
       fromDateModel = new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day,0,0,0);
@@ -93,7 +113,7 @@ export class TemperatureComponent implements OnInit {
     if (this.toDate !== undefined)
       toDateModel = new Date(this.toDate.year, this.toDate.month-1, this.toDate.day,23,59,59);
 
-    var adata = this.temperatureService.getTemperaturesDataEndpoint(fromDateModel, toDateModel, this.samplinginterval);
+    var adata = this.temperatureService.getTemperaturesDataEndpoint(fromDateModel, toDateModel, sampling);
     adata.subscribe(data => { this.processData(data) });
   }
 

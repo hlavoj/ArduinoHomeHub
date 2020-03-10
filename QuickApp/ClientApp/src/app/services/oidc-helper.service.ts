@@ -18,7 +18,8 @@ import { LoginResponse } from '../models/login-response.model';
 export class OidcHelperService {
 
     //private get baseUrl() { return this.configurations.baseUrl; }
-    private get baseUrl() { return 'https://localhost:5001'}
+    private get baseUrl() { return 'https://arduinohomehubbe.azurewebsites.net'}
+    //private get baseUrl() { return 'https://localhost:5001'}
     private clientId = 'quickapp_spa';
     private scope = 'openid email profile';
 
