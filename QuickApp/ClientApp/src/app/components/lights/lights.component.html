@@ -1,0 +1,146 @@
+<div>
+  <p></p>
+  <h2> Lights</h2>
+  <div class="row control-box">
+      <div class="col-lg-8">
+        <div class="form-group search-box">
+          <search-box (searchChange)="onSearchChanged($event)" placeholder="{{'users.management.Search' | translate}}">></search-box>
+        </div>
+      </div>
+      <div class="col-lg-4 pr-lg-5">
+        <ul class="nav flex-column flex-lg-row justify-content-end">
+          <li class="nav-item toolbaritem">
+            <a class="nav-link" href="javascript:;" (click)="newUser()">
+              <i class="fa fa-plus-circle"></i> {{'users.management.NewUser' | translate}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  <ngx-datatable class="material colored-header sm table table-striped table-hover"
+                 [loadingIndicator]="loadingIndicator"
+                 [rows]="rows"
+                 [rowHeight]="35"
+                 [headerHeight]="35"
+                 [footerHeight]="35"
+                 [columns]="columns"
+                 [scrollbarV]="true"
+                 [columnMode]="'force'">
+  </ngx-datatable>
+
+      <ng-template #colorTemplate let-row="row" let-value="value">
+        <div>
+          <span class="colorSquare" [ngStyle]="{'background-color': value}" ></span>
+          <span> {{value}}</span>
+        </div>
+      </ng-template>
+
+      <ng-template #indexTemplate let-value="value">
+        <strong>{{value}}</strong>
+      </ng-template>
+    
+      <ng-template #actionsTemplate let-row="row" let-value="value" let-i="index">
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="edit(row)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'roles.management.Edit' | translate}}</a>
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="detail(row)"><i class="fa fa-eye" aria-hidden="true"></i> {{'roles.management.Details' | translate}}</a>
+        <a  class="btn btn-link btn-sm" href="javascript:;" (click)="delete(row)"><i class="fa fa-trash-o" aria-hidden="true"></i> {{'roles.management.Delete' | translate}}</a>
+      </ng-template>
+
+      <ng-template #turnOnTemplate let-row="row" let-value="value" let-i="index">
+        <div class="custom-control custom-switch" >
+          <input name="turnOnInput" [(ngModel)]="value" type="checkbox" class="custom-control-input" [id]="'customSwitch'+row.id"  (change)="turnOnLite(row)"> 
+          <label class="custom-control-label" [for]="'customSwitch'+row.id"></label>
+        </div>
+      </ng-template>
+
+      <div class="modal fade" bsModal #editorModal="bs-modal" (onHidden)="onEditorModalHidden()" [config]="{backdrop: 'static'}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 *ngIf="!editingLightName" class="modal-title float-left"><i class="fa fa-user-plus"></i> Add Light</h4>
+              <h4 *ngIf="editingLightName" class="modal-title float-left"><i class="fa fa-user-circle-o"></i> Edit light: {{editingLightName}}</h4>
+              <button type="button" class="close float-right" title="Close" (click)="editorModal.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- <user-info #userEditor [isGeneralEditor]="true"></user-info> -->
+              <form name="taskEditorForm" #f="ngForm" (ngSubmit)="f.form.valid ? save() : 
+              (showErrorAlert('Creating light failed.', 'Please check form messages.')); ">
+
+            <div class="form-group row has-feedback-icon">
+                <label class="col-form-label col-md-3" for="lightName">Name:</label>
+                <div class="col-md-9">
+                    <input autofocus type="text" id="lightName" name="lightName" placeholder="Enter light name" class="form-control" 
+                        [ngClass]="{'is-valid': f.submitted && lightName.valid, 'is-invalid' : f.submitted && !lightName.valid}"
+                        [(ngModel)]="editedLight.name" #lightName="ngModel" required minlength="4" />
+                    <i *ngIf="f.submitted" class="fa form-control-feedback" [ngClass]="{'fa-check': lightName.valid, 'fa-times' : !lightName.valid}" aria-hidden="true"></i>
+                    <span *ngIf="f.submitted && !lightName.valid" class="invalid-feedback">
+                        Lights ame is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row ">
+                <label class="col-form-label col-md-3" for="lightIntensity">Intensity:</label>
+                <div class="col-md-9">
+                    <input type="number" id="lightIntensity" name="lightIntensity" placeholder="Enter intensity" class="form-control" 
+                      [(ngModel)]="editedLight.intensity"  #lightIntensity="ngModel"
+                      [ngClass]="{'is-valid': lightIntensity.valid, 'is-invalid': !lightIntensity.valid}"
+                      min="0" min="100" required />
+                    <span *ngIf="f.submitted && !lightIntensity.valid" class="invalid-feedback">
+                      error 0 - 100
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="form-group row ">
+              <label class="col-form-label col-md-3" for="lightColor">Color:</label>
+              <div class="col-md-6">
+                <input autofocus type="text" id="lightColorText" name="lightColorText" class="form-control" [(ngModel)]="editedLight.color" #lightColorText="ngModel" />
+              </div>
+              <div class="col-md-3">
+                  <input type="color" id="lightColor" name="lightColor" placeholder="Enter color" class="form-control" 
+                    [(ngModel)]="editedLight.color"  #lightColor="ngModel"
+                    required  value="#ff0000"/>
+                  <span *ngIf="f.submitted && !lightColor.valid" class="invalid-feedback">
+                    color is required
+                  </span>
+
+              </div>
+              
+          </div>
+
+          <div class="form-group row ">
+            <label class="col-form-label col-md-3" for="lightColor">Turn On:</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <input name="lightColor" [(ngModel)]="editedLight.turnOn" class="form-control" type="checkbox" bootstrapToggle data-size="small">
+              </div>
+            </div>
+        </div>
+
+        
+
+            <div class="row">
+                <div class="col-md-12">
+                    <hr class="edit-last-separator-hr" />
+                </div>
+            </div>
+
+
+            <div class="form-group actionBtn-form-group">
+                <div class="float-right">
+                    <button *ngIf="!editingLightName"type="submit" class="btn btn-primary">Add </button>
+                    <button *ngIf="editingLightName"type="submit" class="btn btn-primary">Save </button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+</div>
