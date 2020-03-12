@@ -21,16 +21,16 @@ steps:
   displayName: npm install
   inputs:
     command: 'install'
-    workingDir: 'QuickApp\ClientApp\'
+    workingDir: 'QuickApp/ClientApp'
 - task: Npm@1
   displayName: npm run build
   inputs:
     command: 'custom'
-    workingDir: 'QuickApp\ClientApp\'
+    workingDir: 'QuickApp/ClientApp'
     customCommand: 'run build'
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'QuickApp\ClientApp\dist'
+    rootFolderOrFile: 'QuickApp/ClientApp/dist'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
