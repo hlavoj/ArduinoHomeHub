@@ -13,7 +13,7 @@ import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { Permission, PermissionNames, PermissionValues } from '../models/permission.model';
 import { UserEdit } from '../models/user-edit.model';
-
+  
 export type RolesChangedOperation = 'add' | 'delete' | 'modify';
 export interface RolesChangedEventArg { roles: Role[] | string[]; operation: RolesChangedOperation; }
 

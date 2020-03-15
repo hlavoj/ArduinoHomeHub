@@ -21,6 +21,8 @@ export class TemperatureComponent implements OnInit {
   public lineChartOptions: (ChartOptions & { annotation: any }) = {
     maintainAspectRatio: false, responsive: true, annotation: ''
   };
+
+  
   public lineChartColors: Color[] = [
     {
       borderColor: 'black',
