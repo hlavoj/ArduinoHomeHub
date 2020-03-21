@@ -21,16 +21,16 @@ steps:
   displayName: npm install
   inputs:
     command: 'install'
-    workingDir: 'AzureDeployTest'
+    workingDir: 'QuickApp/ClientApp'
 - task: Npm@1
   displayName: npm run build
   inputs:
     command: 'custom'
-    workingDir: 'AzureDeployTest'
+    workingDir: 'QuickApp/ClientApp'
     customCommand: 'run build-prod'
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'AzureDeployTest/dist'
+    rootFolderOrFile: 'QuickApp/ClientApp/dist'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
