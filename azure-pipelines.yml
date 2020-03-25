@@ -21,7 +21,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: 'QuickApp/ClientApp'
-    customCommand: 'run build-prod'
+    customCommand: 'run build'
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: 'QuickApp/ClientApp/dist'
