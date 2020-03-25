@@ -14,7 +14,7 @@ steps:
 - task: Npm@1
   displayName: npx npm-force-resolutions
   inputs:
-    command: 'Custom'
+    command: 'custom'
     workingDir: 'QuickApp/ClientApp'
     customCommand: 'npx npm-force-resolutions'
 - task: Npm@1
