@@ -16,12 +16,15 @@
     "serve": "ng serve",
     "theme": "sass --watch --style=compressed --no-source-map src/app/assets/themes:src/assets/themes",
     "build": "ng build",
-    "build-prod": "ng build --prod",
+    "build-prod": "ng build --prod --aot=false --buildOptimizer=false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
+  "resolutions": {
+    "@babel/preset-env": "7.5.5"
+  },
   "dependencies": {
     "@angular/animations": "~8.2.14",
     "@angular/common": "~8.2.14",
