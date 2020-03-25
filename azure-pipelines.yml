@@ -18,7 +18,14 @@ steps:
       cd QuickApp/ClientApp
       npx npm-force-resolutions
       cd ..
-      cd..'
+      cd ..
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Write your commands here
+      
+      echo Hello world
 
 - task: Npm@1
   displayName: npm install
