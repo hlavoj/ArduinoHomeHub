@@ -12,10 +12,17 @@ pool:
 steps:
 
 - task: Npm@1
+  displayName: npx npm-force-resolutions
+  inputs:
+    command: 'Custom'
+    workingDir: 'QuickApp/ClientApp'
+    customCommand: 'npx npm-force-resolutions'
+- task: Npm@1
   displayName: npm install
   inputs:
     command: 'install'
     workingDir: 'QuickApp/ClientApp'
+
 - task: Npm@1
   displayName: npm run build
   inputs:
