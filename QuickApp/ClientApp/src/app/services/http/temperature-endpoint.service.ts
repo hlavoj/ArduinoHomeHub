@@ -14,28 +14,24 @@ import { DataResponse } from 'src/app/models/dataResponse.model';
 })
 export class TemperatureEndpointService extends EndpointBase {
 
-
-  //get endpointUrl() { return this.configurations.baseUrl + '/data/1/temperature' }
-  get endpointUrl() { return 'https://private-293278-angulartutorial1.apiary-mock.com' + '/data/1/temperature' }
-  //get endpointDataUrl() { return 'http://localhost:5000' + '/api/temperature' }
-  get endpointDataUrl() { return 'http://arduinohomehubbe.azurewebsites.net' + '/api/temperature' }
+ // get endpointUrl() { return this.configurations.baseUrl + '/data/1/temperature' }
+  get endpointDataUrl() { return this.configurations.baseUrl + '/api/temperature' }
 
   constructor(http: HttpClient, authService: AuthService, private configurations: ConfigurationService) {
     super(http, authService);
   }
 
-  getTemperaturesEndpoint<T>(): Observable<T> {
-    return this.http.get<T>(this.endpointUrl, this.requestHeaders).pipe<T>(
-      catchError(error => {
-        return this.handleError(error, () => this.getTemperaturesEndpoint());
-      }));
-  }
+  // getTemperaturesEndpoint<T>(): Observable<T> {
+  //   return this.http.get<T>(this.endpointUrl, this.requestHeaders).pipe<T>(
+  //     catchError(error => {
+  //       return this.handleError(error, () => this.getTemperaturesEndpoint());
+  //     }));
+  // }
 
 
-
-  getTemperatures(userId?: string) {
-    return this.getTemperaturesEndpoint<DataResponse[]>();
-  }
+  // getTemperatures(userId?: string) {
+  //   return this.getTemperaturesEndpoint<DataResponse[]>();
+  // }
 
   getTemperaturesData(fromDate?: Date, toDate?: Date) {
     return this.getTemperaturesDataEndpoint(fromDate);
@@ -52,7 +48,7 @@ export class TemperatureEndpointService extends EndpointBase {
  
     return this.http.get<DataResponse[]>(url, this.requestHeaders).pipe<DataResponse[]>(
       catchError(error => {
-        return this.handleError(error, () => this.getTemperaturesEndpoint());
+        return this.handleError(error, () => this.getTemperaturesData());
       }));
   }
 
