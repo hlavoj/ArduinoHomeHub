@@ -21,7 +21,7 @@ export class OidcHelperService {
     //private get baseUrl() { return 'https://arduinohomehubbe.azurewebsites.net'}
     //private get baseUrl() { return 'https://localhost:5001'}
     private clientId = 'quickapp_spa';
-    private scope = 'openid email profile';
+    private scope = 'openid email profile offline_access quickapp_api';
 
     constructor(
         private http: HttpClient,
