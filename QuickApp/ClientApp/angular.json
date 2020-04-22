@@ -25,7 +25,8 @@
             "progress": true,
             "extractCss": true,
             "assets": [
-              "src/assets"
+              "src/assets",
+              "src/web.config"
             ],
             "styles": [
               "src/styles.scss"
